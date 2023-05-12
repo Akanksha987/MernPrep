@@ -2,14 +2,6 @@ const express = require("express");
 const app = express();
 const dataJson = require("./courses.json");
 const Course = require("./Courses");
-const { default: mongoose } = require("mongoose");
-
-mongoose.connect(
-  "mongodb+srv://agrawalakanksha23123:preeti23123@cluster0.1i5fzbv.mongodb.net/test",
-  {
-    family: 4,
-  }
-);
 
 // Task 1
 app.get("/courses", (req, res) => {
@@ -39,16 +31,21 @@ app.get("/courses/:name/rating", (req, res) => {
 });
 // Task 4
 app.post("/courses", (req, res) => {
-  const newCourse = new Course(req.body);
+  const dataSend = req.body;
 
-  newCourse.save((err, course) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send("Error creating course");
-    } else {
-      res.status(200).send(course);
-    }
-  });
+  const newCourse = {
+    course: dataSend.course,
+    courseId: dataSend.courseId,
+    cohort: dataSend.cohort,
+    college: dataSend.college,
+    semester: dataSend.semester,
+    averageRating: dataSend.averageRating,
+    studentsVoted: dataSend.studentsVoted,
+  };
+  const data = dataJson.kalvium;
+  data.push(newCourse);
+
+  res.status(200).send("Data saved successfully");
 });
 
 app.put("/courses/:name", (req, res) => {
